@@ -26,6 +26,16 @@ TEST(test_05, basic_test_set)
     ASSERT_TRUE(delete_letters("dsAdasAasdOOIKDadasd")=="");
 }
 
+TEST(test_06, basic_test_set)
+{
+    ASSERT_TRUE(delete_letters("IOqwe54voiyf  dsa 123")=="");
+}
+
+TEST(test_07, basic_test_set)
+{
+    ASSERT_TRUE(delete_letters("123\n32")=="");
+}
+
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
