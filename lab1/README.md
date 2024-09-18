@@ -10,7 +10,7 @@
 
 cd lab1
 
-для программы ./run_program.sh
+для программы ./run_program.sh  
 для тестов ./run_tests.sh
 
 
