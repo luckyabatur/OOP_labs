@@ -5,7 +5,7 @@
 int main()
 {
     std::string lettnum, result;
-    std::cout << "Input your string: ";
+    std::cout << "Input your string: "; 
     getline(std::cin, lettnum);
 
     result = delete_letters(lettnum);
