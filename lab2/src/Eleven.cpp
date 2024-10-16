@@ -55,8 +55,36 @@ other._array = nullptr;
 
 Eleven Eleven::add(const Eleven &other)
 {
-    return Eleven(this->_size+other._size,'1');
+    int t{0};
+    size_t new_size{0};
+    const size_t max_size = (_size > other._size ? _size : other._size) + 1;
+    const size_t min_size = (_size < other._size ? _size : other._size);
+    unsigned char temp[max_size];
+
+    for (int i = 0; i < min_size; i++)
+    {
+        int sum{t};
+        t = 0;
+        if ((sum += to_ten[_array[i]] + to_ten[other._array[i]]) > 10)
+        {
+            t = 1;
+        }
+        temp[i] = sum;
+    }
+
+    if (temp[min_size - 1] > 10)
+    {
+        temp[min_size] = (temp[min_size - 1] - 1) / 10;
+        temp[min_size - 1] -= 11;
+        new_size++;
+    }
+
+    for (auto& x:temp)
+        x = to_eleven[x];
+
+    return Eleven(new_size, temp);
 }
+
 Eleven Eleven::remove(const Eleven &other)
 {
 
@@ -84,8 +112,8 @@ Eleven::~Eleven() noexcept
 std::cout << "destructor" << std::endl;
 if (_size > 0)
 {
-_size = 0;
-delete[] _array;
-_array = nullptr;
+    _size = 0;
+    delete[] _array;
+    _array = nullptr;
 }
 }
