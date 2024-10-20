@@ -141,11 +141,12 @@ Eleven Eleven::add(const Eleven &other)
         new_size++;
     }
 
-    std::string res;
+    delete [] _array;
+    _array = new unsigned char[new_size];
+    _size = new_size;
     for (int i = new_size-1; i >= 0; i--)
-        res.push_back(to_eleven[temp[i]]);
-    int size = res.size();
-    return res;
+        _array[i] = to_eleven[temp[i]];
+    return *this;
 }
 
 Eleven Eleven::remove(const Eleven &other)
@@ -181,11 +182,12 @@ Eleven Eleven::remove(const Eleven &other)
         new_size--;
     }
 
-    std::string res;
+    delete [] _array;
+    _array = new unsigned char [new_size];
+    _size = new_size;
     for (int i = new_size - 1; i >= 0; i--)
-        res.push_back(to_eleven[temp[i]]);
-
-    return res;
+        _array[i] = to_eleven[temp[i]];
+    return *this;
 }
 
 bool Eleven::equals(const Eleven &other) const
