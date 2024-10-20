@@ -1,4 +1,4 @@
-#include "Eleven.h"
+#include "../include/Eleven.h"
 
 Eleven::Eleven() : _size(0), _array{nullptr}
 {
@@ -17,20 +17,76 @@ Eleven::Eleven(const size_t &n, unsigned char t)
 Eleven::Eleven(const std::initializer_list<unsigned char> &t)
 {
     std::cout << "Initializer list constructor" << std::endl;
-    _array = new unsigned char[t.size()];
+    if (empty(t))
+    {
+        return;
+    }
+    int count{0};
+    bool flag{true};
     size_t i{0};
     for (auto &c : t)
-        _array[i++] = c;
-    _size = t.size();
+    {
+        if (c == '0' && flag)
+        {
+            count++;
+            continue;
+        }
+        else if (flag)
+        {
+            flag = false;
+            _array = new unsigned char[t.size()-count];
+            i = t.size()-count-1;
+        }
+        if (!(c >= '0' && c <= '9' || c == 'A'))
+        {
+            delete[] _array;
+            throw std::invalid_argument("Initializer list constructor error");
+        }
+        _array[i--] = c;
+    }
+    _size = t.size()-count;
+    if (count > 0 && count == t.size())
+    {
+        _size++;
+        _array = new unsigned char []{'0'};
+    }
 }
 
-Eleven::Eleven(const std::string &t)
+Eleven::Eleven(std::string t)
 {
     std::cout << "Copy string constructor" << std::endl;
+    if (empty(t))
+    {
+        return;
+    }
+
+
+
+    int count{0};
+    while (t[count] == '0')
+        count++;
+    t.erase(0, count);
+
+    if (empty(t))
+    {
+        _size = 1;
+        _array = new unsigned char[]{'0'};
+        return;
+    }
+
     _array = new unsigned char[t.size()];
     _size  = t.size();
 
-    for(size_t i{0};i<_size;++i) _array[i] = t[i];
+    for(size_t i{0}; i < _size;++i)
+    {
+        int j = _size - 1 - i;
+        if (!(t[j] >= '0' && t[j] <= '9' || t[j] == 'A'))
+        {
+            delete[] _array;
+            throw std::invalid_argument("String constructor error");
+        }
+        _array[i] = t[j];
+    }
 }
 
 Eleven::Eleven(const Eleven &other)
@@ -56,54 +112,127 @@ other._array = nullptr;
 Eleven Eleven::add(const Eleven &other)
 {
     int t{0};
-    size_t new_size{0};
-    const size_t max_size = (_size > other._size ? _size : other._size) + 1;
-    const size_t min_size = (_size < other._size ? _size : other._size);
-    unsigned char temp[max_size];
+    const  bool first_bigger = _size > other._size;
+    const size_t max_size = (first_bigger ? _size : other._size);
+    const size_t min_size = (!first_bigger ? _size : other._size);
 
-    for (int i = 0; i < min_size; i++)
+    size_t new_size = max_size;
+    int temp[max_size + 1];
+
+    for (int i = 0; i < max_size; i++)
     {
-        int sum{t};
+        temp[i] = t;
         t = 0;
-        if ((sum += to_ten[_array[i]] + to_ten[other._array[i]]) > 10)
+        if (i < min_size)
+            temp[i] += to_ten(_array[i]) + to_ten(other._array[i]);
+        else if (first_bigger)
+            temp[i] += to_ten(_array[i]);
+        else
+            temp[i] += to_ten(other._array[i]);
+        if (temp[i] > 10)
         {
             t = 1;
         }
-        temp[i] = sum;
     }
-
-    if (temp[min_size - 1] > 10)
+    if (temp[max_size-1] > 10)
     {
-        temp[min_size] = (temp[min_size - 1] - 1) / 10;
-        temp[min_size - 1] -= 11;
+        temp[max_size-1] = temp[max_size-1] - 11;
+        temp[max_size] = 1;
         new_size++;
     }
 
-    for (auto& x:temp)
-        x = to_eleven[x];
-
-    return Eleven(new_size, temp);
+    std::string res;
+    for (int i = new_size-1; i >= 0; i--)
+        res.push_back(to_eleven[temp[i]]);
+    int size = res.size();
+    return res;
 }
 
 Eleven Eleven::remove(const Eleven &other)
 {
 
-    if(_size<other._size) throw std::logic_error("dash Eleven can't be negative");
+    if((*this).lt(other)) throw std::logic_error("Eleven can't be negative");
 
-    _size -= other._size;
+    int temp[_size];
+    int t{0};
+    size_t new_size{_size};
 
-    return *this;
+    for (int i = 0; i < _size; i++)
+    {
+        int a = to_ten(_array[i]);
+        int b = (i < other._size) ? to_ten(other._array[i]) : 0;
+
+        if (a - t < b)
+        {
+
+            temp[i] = 11 - t - b + a;
+            t = 1;
+        }
+        else
+        {
+            temp[i] = a - t - b;
+            t = 0;
+        }
+    }
+
+    int j = _size-1;
+    while (temp[j--] == 0)
+    {
+        new_size--;
+    }
+
+    std::string res;
+    for (int i = new_size - 1; i >= 0; i--)
+        res.push_back(to_eleven[temp[i]]);
+
+    return res;
 }
 
 bool Eleven::equals(const Eleven &other) const
 {
-    return _size==other._size;
+    if(_size!=other._size)
+        return false;
+
+    for (int i = 0; i < _size; i++)
+        if (_array[i] != other._array[i])
+            return false;
+
+    return true;
 }
 
+bool Eleven::lt(const Eleven& other) const
+{
+    return (*this).compare(other, LESS);
+}
+
+
+bool Eleven::mt(const Eleven& other) const
+{
+    return (*this).compare(other, MORE);
+}
+
+bool Eleven::compare(const Eleven &other, Eleven::COMPARE_TYPE type) const
+{
+    if (_size < other._size)
+        return type;
+    else if (_size > other._size)
+        return !type;
+
+    for (int i = _size - 1; i >= 0; i--)
+    {
+        if (_array[i] < other._array[i])
+            return type;
+        else if (_array[i] > other._array[i])
+            return !type;
+    }
+
+    return false;
+}
 std::ostream &Eleven::print(std::ostream &os)
 {
-    for (size_t i = 0; i < _size; ++i)
+    for (int i = _size - 1; i >= 0; i--)
         os << _array[i];
+
     return os;
 }
 
