@@ -37,6 +37,7 @@ int main(void)
                 std::cout << "Сделайте корректный выбор" << std::endl;
         }
         std:: cout << "------------------------------" << std::endl;
+        std::cin.ignore(100000, '\n');
     }
     return 0;
 }

@@ -16,9 +16,11 @@ Eleven::Eleven(const std::initializer_list<unsigned char> &t)
     {
         return;
     }
+
     int count{0};
     bool flag{true};
     size_t i{0};
+
     for (auto &c : t)
     {
         if (c == '0' && flag)
@@ -39,6 +41,7 @@ Eleven::Eleven(const std::initializer_list<unsigned char> &t)
         }
         _array[i--] = c;
     }
+
     _size = t.size()-count;
     if (count > 0 && count == t.size())
     {
@@ -84,7 +87,6 @@ Eleven::Eleven(std::string t)
 Eleven::Eleven(const Eleven &other)
 {
     _size  = other._size;
-    //delete _array;
     _array = new unsigned char[_size];
 
     for(size_t i{0};i<_size;++i) _array[i] = other._array[i];
@@ -92,11 +94,11 @@ Eleven::Eleven(const Eleven &other)
 
 Eleven::Eleven(Eleven &&other) noexcept
 {
-_size = other._size;
-_array = other._array;
+    _size = other._size;
+    _array = other._array;
 
-other._size = 0;
-other._array = nullptr;
+    other._size = 0;
+    other._array = nullptr;
 }
 
 Eleven Eleven::add(const Eleven &other)
@@ -229,10 +231,10 @@ std::ostream &Eleven::print(std::ostream &os)
 
 Eleven::~Eleven() noexcept
 {
-if (_size > 0)
-{
-    _size = 0;
-    delete[] _array;
-    _array = nullptr;
-}
+    if (_size > 0)
+    {
+        _size = 0;
+        delete[] _array;
+        _array = nullptr;
+    }
 }
