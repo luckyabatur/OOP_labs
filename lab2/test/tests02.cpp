@@ -90,7 +90,8 @@ TEST(test_12, basic_test_set)
     ASSERT_TRUE(a.lt(b) && b.mt(a));
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

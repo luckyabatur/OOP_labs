@@ -1,13 +1,9 @@
 #include "../include/Eleven.h"
 
-Eleven::Eleven() : _size(0), _array{nullptr}
-{
-    std::cout << "Default constructor" << std::endl;
-}
+Eleven::Eleven() : _size(0), _array{nullptr} {}
 
 Eleven::Eleven(const size_t &n, unsigned char t)
 {
-    std::cout << "Fill constructor" << std::endl;
     _array = new unsigned char[n];
     for (size_t i = 0; i < n; ++i)
         _array[i] = t;
@@ -16,7 +12,6 @@ Eleven::Eleven(const size_t &n, unsigned char t)
 
 Eleven::Eleven(const std::initializer_list<unsigned char> &t)
 {
-    std::cout << "Initializer list constructor" << std::endl;
     if (empty(t))
     {
         return;
@@ -54,13 +49,10 @@ Eleven::Eleven(const std::initializer_list<unsigned char> &t)
 
 Eleven::Eleven(std::string t)
 {
-    std::cout << "Copy string constructor" << std::endl;
     if (empty(t))
     {
         return;
     }
-
-
 
     int count{0};
     while (t[count] == '0')
@@ -91,7 +83,6 @@ Eleven::Eleven(std::string t)
 
 Eleven::Eleven(const Eleven &other)
 {
-    std::cout << "Copy constructor" << std::endl;
     _size  = other._size;
     //delete _array;
     _array = new unsigned char[_size];
@@ -101,7 +92,6 @@ Eleven::Eleven(const Eleven &other)
 
 Eleven::Eleven(Eleven &&other) noexcept
 {
-std::cout << "Move constructor" << std::endl;
 _size = other._size;
 _array = other._array;
 
@@ -151,7 +141,6 @@ Eleven Eleven::add(const Eleven &other)
 
 Eleven Eleven::remove(const Eleven &other)
 {
-
     if((*this).lt(other)) throw std::logic_error("Eleven can't be negative");
 
     int temp[_size];
@@ -240,7 +229,6 @@ std::ostream &Eleven::print(std::ostream &os)
 
 Eleven::~Eleven() noexcept
 {
-std::cout << "destructor" << std::endl;
 if (_size > 0)
 {
     _size = 0;
