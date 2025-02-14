@@ -57,8 +57,8 @@ int main()
         }
         std:: cout << "------------------------------" << std::endl;
         std::cin.ignore(100000, '\n');
-//        delete n1;
-//        delete n2;
+        delete n1;
+        delete n2;
     }
     return 0;
 }
