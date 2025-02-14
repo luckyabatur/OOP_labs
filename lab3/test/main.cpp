@@ -64,6 +64,8 @@ int main(void)
             std::cout << "------------------------------" << std::endl;
             std::cin.ignore(100000, '\n');
         }
+        for (Figure* &fptr : v)
+            delete fptr;
     }
 
 
