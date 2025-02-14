@@ -6,7 +6,7 @@
 int main(void)
 {
     char choice{0};
-    
+
     while (choice != '7')
     {
         std::cout << "Вводите фигуры в вектор:" << std::endl;
