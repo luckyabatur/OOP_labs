@@ -53,7 +53,8 @@ int main(void)
                     int index;
                     std::cin.ignore(100000, '\n');
                     std::cin >> index;
-                    del(v, index);
+                    if (!del(v, index))
+                        std::cout << "Некорректный индекс" << std::endl;
                     break;
                 case ('6'):
                     break;
