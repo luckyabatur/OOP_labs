@@ -17,11 +17,14 @@ public:
 
     void push_back(const T el);
     bool del(int index);
+    bool empty(size_t index);
+    int get_size();
 
     Array() = default;
     Array(const std::initializer_list<T> &t);
     Array(const Array &other);
     Array(Array &&other) noexcept;
+
 
 
     T& operator[](size_t index);
@@ -102,4 +105,16 @@ T& Array<T>::operator[](size_t index)
 {
     assert(index < size);
     return array[index];
+}
+
+template <typename T>
+bool Array<T>::empty(size_t index)
+{
+    return size;
+}
+
+template <typename T>
+int Array<T>::get_size()
+{
+    return size;
 }
