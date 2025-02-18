@@ -18,7 +18,7 @@ public:
     void push_back(const T el);
     bool del(int index);
 
-    Array();
+    Array() = default;
     Array(const std::initializer_list<T> &t);
     Array(const Array &other);
     Array(Array &&other) noexcept;
@@ -35,7 +35,6 @@ void Array<T>::resize()
     else
         capacity *= 2;
 
-    capacity *= 2;
     std::shared_ptr<T[]> new_arr (new T[capacity]);
 
     for (int i{0}; i < size; i++)
@@ -66,8 +65,6 @@ bool Array<T>::del(int index)
     return true;
 }
 
-template <typename T>
-Array<T>::Array() {}
 
 template <typename T>
 Array<T>::Array(const std::initializer_list<T> &t)

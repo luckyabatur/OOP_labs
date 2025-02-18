@@ -12,13 +12,13 @@ class Figure
 {
 protected:
     enum FIGURE_TYPE {PENTAGON, HEXAGON, OCTAGON};
-    std::shared_ptr<Point<T>> coords{nullptr};
+    std::shared_ptr<Point<T>[]> coords{nullptr};
 
     virtual std::ostream& output(std::ostream& os) const = 0 ;
     virtual std::istream& input(std::istream& is) = 0;
 
-    static bool check_and_reorder(std::shared_ptr<Point<T>>& arr, int point_number);
-    static Point<double> dop_geomc(std::shared_ptr<const Point<T>>&, int point_number);
+    static bool check_and_reorder(std::shared_ptr<Point<T>[]>& arr, int point_number);
+    static Point<double> dop_geomc(std::shared_ptr<const Point<T>[]>&, int point_number);
 
 public:
 
@@ -74,8 +74,7 @@ Figure<T>::Figure(const Figure& other)
 template <Number T>
 Figure<T>::Figure(Figure&& other) noexcept
 {
-    coords = other.coords;
-    other.coords = nullptr;
+    coords = std::move(other.coords);
 }
 
 
@@ -107,7 +106,7 @@ std::istream& operator>>(std::istream& is, Figure<T>& fig)
 }
 
 template <Number T>
-bool Figure<T>::check_and_reorder(std::shared_ptr<Point<T>>& arr, int point_number)
+bool Figure<T>::check_and_reorder(std::shared_ptr<Point<T>[]>& arr, int point_number)
 {
     Point<double> center = dop_geomc(arr, point_number);
     double rad = distance(center, arr[0]);
@@ -153,7 +152,7 @@ bool Figure<T>::check_and_reorder(std::shared_ptr<Point<T>>& arr, int point_numb
 }
 
 template <Number T>
-Point<double> Figure<T>::dop_geomc(std::shared_ptr<const Point<T>>& arr, int point_number)
+Point<double> Figure<T>::dop_geomc(std::shared_ptr<const Point<T>[]>& arr, int point_number)
 {
     double x{0};
     for (int i{0}; i < point_number; i++)

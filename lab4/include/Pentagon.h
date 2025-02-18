@@ -68,7 +68,7 @@ Pentagon<T>& Pentagon<T>::operator=(Pentagon<T>&& other) noexcept
     if (*this == other)
         return *this;
 
-    Figure<T>coords = other.coords;
+    Figure<T>::coords = other.coords;
     other.coords = nullptr;
 
     return *this;
