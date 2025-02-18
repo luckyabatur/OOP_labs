@@ -29,7 +29,22 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Point& p);
     friend std::istream& operator>>(std::istream& is, Point& p);
 
-    friend bool operator==(const Point& p1, const Point& p2);
+    friend bool operator==(const Point& p1, const Point& p2) requires Integral<T>
+    {
+        if (p1.x != p2.x || p1.y != p2.y)
+            return false;
+
+        return true;
+    }
+
+    friend bool operator==(const Point& p1, const Point& p2) requires Float_point<T>
+    {
+        if (!double_equal(p1.x, p2.x) || !double_equal(p1.y, p2.y))
+            return false;
+
+        return true;
+    }
+
 
     friend double distance(const Point& p1, const Point& p2);
 
@@ -39,7 +54,6 @@ public:
 
 template <Number T>
 double distance(const Point<T>& p1, const Point<T>& p2);
-
 
 
 template <Number T>
@@ -68,14 +82,19 @@ std::istream& operator>>(std::istream& is, Point<T>& p)
     return is;
 }
 
-template <Number T>
-bool operator==(const Point<T>& p1, const Point<T>& p2)
-{
-    if (!double_equal(p1.x, p2.x) || !double_equal(p1.y, p2.y))
-        return false;
+//template <Number T>
+//requires Integral<T>
+//bool operator==(const Point<T>& p1, const Point<T>& p2) requires Integral<T>
+//{
+//    if (!double_equal(p1.x, p2.x) || !double_equal(p1.y, p2.y))
+//        return false;
+//
+//    return true;
+//}
 
-    return true;
-}
+//template <Number T>
+//bool operator==(const Point<T>& p1, const Point<T>& p2) requires Float_point<T>
+
 
 template <Number T>
 double distance(const Point<T>& p1, const Point<T>& p2)
