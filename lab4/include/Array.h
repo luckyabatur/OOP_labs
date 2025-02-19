@@ -3,14 +3,12 @@
 #include <cassert>
 
 
-
 template <typename T>
 class Array
 {
     std::shared_ptr<T[]> array{nullptr};
     int size{0};
     int capacity{0};
-
     void resize();
 
 public:
@@ -41,8 +39,8 @@ void Array<T>::resize()
 
     std::shared_ptr<T[]> new_arr (new T[capacity]);
 
-    for (int i{0}; i < size; i++)
-        new_arr[i] = array[i];
+    for (int i = 0; i < size; i++)
+        new_arr[i] = std::move(array[i]);
 
     array = new_arr;
 }

@@ -5,19 +5,19 @@
 #include "./double_equal.h"
 
 template<Number T>
-class Pentagon: public Figure<T>
+class Octagon: public Figure<T>
 {
-    const static typename Figure<T>::FIGURE_TYPE type{Figure<T>::PENTAGON};
+    const static typename Figure<T>::FIGURE_TYPE type{Figure<T>::OCTAGON};
 public:
-    const static int point_count{5};
+    const static int point_count{8};
 
     using value_type = T;
-    Pentagon();
-    Pentagon(const Pentagon&  other);
-    Pentagon(Pentagon&& other) noexcept;
+    Octagon();
+    Octagon(const Octagon&  other);
+    Octagon(Octagon&& other) noexcept;
 
-    Pentagon& operator=(const Pentagon& other);
-    Pentagon& operator=(Pentagon&& other) noexcept;
+    Octagon& operator=(const Octagon& other);
+    Octagon& operator=(Octagon&& other) noexcept;
 
     [[nodiscard]] Point<double> geomc() override;
     explicit operator double() const override;
@@ -28,26 +28,26 @@ public:
     std::istream& input(std::istream& is) override;
     std::ostream& output(std::ostream& os) const override;
 
-    ~Pentagon() override = default;
+    ~Octagon() override = default;
 };
 
 template<Number T>
-Pentagon<T>::Pentagon() : Figure<T>(point_count) {}
+Octagon<T>::Octagon() : Figure<T>(point_count) {}
 
 template<Number T>
-Pentagon<T>::Pentagon(const Pentagon<T>& other) : Figure<T>(other) {}
+Octagon<T>::Octagon(const Octagon<T>& other) : Figure<T>(other) {}
 
 template<Number T>
-Pentagon<T>::Pentagon(Pentagon<T>&& other) noexcept : Figure<T>(std::move(other)) {}
+Octagon<T>::Octagon(Octagon<T>&& other) noexcept : Figure<T>(std::move(other)) {}
 
 template<Number T>
-typename Figure<T>::FIGURE_TYPE Pentagon<T>::get_type() const
+typename Figure<T>::FIGURE_TYPE Octagon<T>::get_type() const
 {
     return type;
 }
 
 template<Number T>
-Pentagon<T>& Pentagon<T>::operator=(const Pentagon<T>& other)
+Octagon<T>& Octagon<T>::operator=(const Octagon<T>& other)
 {
     if (this == &other)
         return *this;
@@ -59,7 +59,7 @@ Pentagon<T>& Pentagon<T>::operator=(const Pentagon<T>& other)
 }
 
 template<Number T>
-Pentagon<T>& Pentagon<T>::operator=(Pentagon<T>&& other) noexcept
+Octagon<T>& Octagon<T>::operator=(Octagon<T>&& other) noexcept
 {
     if (this == &other)
         return *this;
@@ -69,20 +69,23 @@ Pentagon<T>& Pentagon<T>::operator=(Pentagon<T>&& other) noexcept
 }
 
 template<Number T>
-Point<double> Pentagon<T>::geomc()
+Point<double> Octagon<T>::geomc()
 {
-    return this->dop_geomc(this->coords, point_count);
+    double x = ((this->coords[0])->get_x() + (this->coords[4])->get_x()) / 2;
+    double y = ((this->coords[0])->get_y() + (this->coords[4])->get_y()) / 2;
+
+    return Point{x, y};
 }
 
 template<Number T>
-Pentagon<T>::operator double() const
+Octagon<T>::operator double() const
 {
-    return 1.7204774005889671
+    return 4.828427124746190097
            * std::pow(distance(*this->coords[0], *this->coords[1]), 2);
 }
 
 template<Number T>
-std::istream& Pentagon<T>::input(std::istream& is)
+std::istream& Octagon<T>::input(std::istream& is)
 {
     for (int i{0}; i < point_count; i++)
     {
@@ -90,15 +93,15 @@ std::istream& Pentagon<T>::input(std::istream& is)
     }
     if (!this->check_and_reorder(this->coords, point_count))
     {
-        throw std::invalid_argument("Невозможно построить правильный пятиугольник");
+        throw std::invalid_argument("Невозможно построить восьмиугольник");
     }
     return is;
 }
 
 template<Number T>
-std::ostream& Pentagon<T>::output(std::ostream& os) const
+std::ostream& Octagon<T>::output(std::ostream& os) const
 {
-    os << "Пятиугольник: ";
+    os << "Восьмиугольник: ";
     for (int i{0}; i < point_count; i++)
     {
         os << *this->coords[i] << ' ';
@@ -107,7 +110,7 @@ std::ostream& Pentagon<T>::output(std::ostream& os) const
 }
 
 template<Number T>
-int Pentagon<T>::get_vertices_number() const
+int Octagon<T>::get_vertices_number() const
 {
     return point_count;
 }

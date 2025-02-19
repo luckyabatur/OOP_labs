@@ -3,15 +3,16 @@
 #include "Figure.h"
 #include "Array.h"
 #include "Pentagon.h"
-//#include "Hexagon.h"
-//#include "Octagon.h"
+#include "Hexagon.h"
+#include "Octagon.h"
 
 template <typename T>
-concept OneTypeFig = std::is_same_v<T, Pentagon<typename T::value_type>>;
+concept OneTypeFig = std::is_same_v<T, Pentagon<typename T::value_type>> || std::is_same_v<T, Hexagon<typename T::value_type>> || std::is_same_v<T, Octagon<typename T::value_type>>;
 
 
 template <typename T>
-concept Fig = std::is_same_v<T, Figure<typename T::value_type>> || std::is_same_v<T, Pentagon<typename T::value_type>>;
+concept Fig = std::is_same_v<T, Figure<typename T::value_type>> || std::is_same_v<T, Pentagon<typename T::value_type>> || std::is_same_v<T, Hexagon<typename T::value_type>> || std::is_same_v<T, Octagon<typename T::value_type>>;
+
 
 
 template <typename T>

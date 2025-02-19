@@ -1,5 +1,5 @@
 #include "../include/array_func.h"
-//#include <variant>
+
 
 
 template <typename T>
@@ -75,8 +75,8 @@ int main(void)
 
         Array<std::shared_ptr<Figure<double>>> v1;
         Array<std::shared_ptr<Pentagon<double>>> v2;
-//        Array<std::shared_ptr<Hexagon<double>>> v3;
-//        Array<std::shared_ptr<Octagon<double>>> v4;
+        Array<std::shared_ptr<Hexagon<double>>> v3;
+        Array<std::shared_ptr<Octagon<double>>> v4;
 
         std::cin >> arr_choice;
 
@@ -89,10 +89,10 @@ int main(void)
                 choice = menu(v2);
                 break;
             case '3':
-//              choice = menu(v3);
+                choice = menu(v3);
                 break;
             case '4':
-//              choice = menu(v4);
+                choice = menu(v4);
                 break;
             default:
                 std::cout << "Некорректный выбор" << std::endl;

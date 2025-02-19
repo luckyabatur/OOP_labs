@@ -57,7 +57,7 @@ std::istream& Hexagon::input(std::istream& is)
     if (!check_and_reorder(coords, point_count))
     {
         coords = nullptr;
-        throw std::invalid_argument("Невозможно построить правильный пятиугольник");
+        throw std::invalid_argument("Невозможно построить правильный шестиугольник");
     }
 
     return is;
