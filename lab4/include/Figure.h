@@ -18,9 +18,11 @@ protected:
     virtual std::istream& input(std::istream& is) = 0;
 
     static bool check_and_reorder(std::shared_ptr<Point<T>[]>& arr, int point_number);
-    static Point<double> dop_geomc(std::shared_ptr<const Point<T>[]>&, int point_number);
+    static Point<double> dop_geomc(std::shared_ptr<Point<T>[]>&, int point_number);
 
 public:
+
+    using value_type = T;
 
     Figure() = default;
     explicit Figure(const int vertices_number);
@@ -28,39 +30,43 @@ public:
     Figure(const Figure& other);
     Figure(Figure&& other) noexcept;
 
-    [[nodiscard]] virtual Point<double> geomc() const = 0;
+    [[nodiscard]] virtual Point<double> geomc() = 0;
     virtual explicit operator double() const = 0;
 
     [[nodiscard]] virtual FIGURE_TYPE get_type() const = 0;
     [[nodiscard]] virtual int get_vertices_number() const = 0;
 
-    friend bool operator==(const Figure& fig1, const Figure& fig2);
+    friend bool operator==(const Figure& fig1, const Figure& fig2)
+    {
+        if (fig1.get_type() != fig2.get_type())
+            return false;
 
-    friend std::ostream& operator<<(std::ostream& os, const Figure& fig);
-    friend std::istream& operator>>(std::istream& is, Figure& fig);
+        Point<double> cent1 = fig1.geomc();
+        Point<double> cent2 = fig2.geomc();
+
+        if (cent1 == cent2 && double_equal(distance(fig1.coords[0], cent1), distance(fig2.coords[0], cent2)))
+            return true;
+
+        return false;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const Figure<T>& fig)
+    {
+        return fig.output(os);
+    }
+
+    friend std::istream& operator>>(std::istream& is, Figure<T>& fig)
+    {
+        return fig.input(is);
+    }
 
     virtual ~Figure() = default;
 };
 
 
-
-
-
 template <Number T>
-Figure<T>::Figure(const int vertices_number): coords{new Point<T>[vertices_number]{}} {};
+Figure<T>::Figure(const int vertices_number): coords{new Point<T>[vertices_number]} {};
 
-
-//template <Number T>
-//Figure<T>::Figure(Point<T>* arr, const int vertices_number)
-//{
-//
-//    if (!check_and_reorder(arr, vertices_number))
-//        throw std::invalid_argument("Невозможно построить правильный пятиугольник");
-//
-//    coords = new Point<T>[vertices_number];
-//    for (int i{0}; i < vertices_number; i++)
-//        coords[i] = arr[i];
-//}
 
 template <Number T>
 Figure<T>::Figure(const Figure& other)
@@ -75,34 +81,6 @@ template <Number T>
 Figure<T>::Figure(Figure&& other) noexcept
 {
     coords = std::move(other.coords);
-}
-
-
-template <Number T>
-bool operator==(const Figure<T>& fig1, const Figure<T>& fig2)
-{
-    if (fig1.get_type() != fig2.get_type())
-        return false;
-
-    Point<double> cent1 = fig1.geomc();
-    Point<double> cent2 = fig2.geomc();
-
-    if (cent1 == cent2 && double_equal(distance(fig1.coords[0], cent1), distance(fig2.coords[0], cent2)))
-        return true;
-
-    return false;
-}
-
-template <Number T>
-std::ostream& operator<<(std::ostream& os, const Figure<T>& fig)
-{
-    return fig.output(os);
-}
-
-template <Number T>
-std::istream& operator>>(std::istream& is, Figure<T>& fig)
-{
-    return fig.input(is);
 }
 
 template <Number T>
@@ -131,6 +109,7 @@ bool Figure<T>::check_and_reorder(std::shared_ptr<Point<T>[]>& arr, int point_nu
     std::swap(arr[1], arr[sec_v]);
 
     bool flag = false;
+
     for (int i{1}; i < point_number-1; i++)
     {
         flag = false;
@@ -152,7 +131,7 @@ bool Figure<T>::check_and_reorder(std::shared_ptr<Point<T>[]>& arr, int point_nu
 }
 
 template <Number T>
-Point<double> Figure<T>::dop_geomc(std::shared_ptr<const Point<T>[]>& arr, int point_number)
+Point<double> Figure<T>::dop_geomc(std::shared_ptr<Point<T>[]>& arr, int point_number)
 {
     double x{0};
     for (int i{0}; i < point_number; i++)

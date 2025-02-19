@@ -8,9 +8,13 @@
 template<Number T>
 class Pentagon: public Figure<T>
 {
-    const static int point_count{5};
+
     const static Figure<T>::FIGURE_TYPE type{Figure<T>::PENTAGON};
 public:
+
+    const static int point_count{5};
+
+    using value_type = T;
     Pentagon();
 //    explicit Pentagon(Point<T>* arr);
     Pentagon(const Pentagon&  other);
@@ -19,7 +23,7 @@ public:
     Pentagon& operator=(const Pentagon& other);
     Pentagon& operator=(Pentagon&& other) noexcept;
 
-    [[nodiscard]] Point<double> geomc() const override;
+    [[nodiscard]] Point<double> geomc() override;
     explicit operator double() const override;
 
     [[nodiscard]] Figure<T>::FIGURE_TYPE get_type() const override;
@@ -35,8 +39,6 @@ public:
 template<Number T>
 Pentagon<T>::Pentagon() : Figure<T>(point_count) {};
 
-//template<Number T>
-//Pentagon<T>::Pentagon(Point<T>* arr) : Figure<T>(arr, point_count) {};
 
 template<Number T>
 Pentagon<T>::Pentagon(const Pentagon<T>& other) : Figure<T>(other) {};
@@ -53,11 +55,11 @@ Figure<T>::FIGURE_TYPE Pentagon<T>::get_type() const
 template<Number T>
 Pentagon<T>& Pentagon<T>::operator=(const Pentagon<T>& other)
 {
-    if (*this == other)
+    if (this == &other)
         return *this;
 
     for (int i{0}; i < point_count; i++)
-        Figure<T>::coords[i] = other.coords[i];
+        this->coords[i] = other.coords[i];
 
     return *this;
 }
@@ -68,31 +70,31 @@ Pentagon<T>& Pentagon<T>::operator=(Pentagon<T>&& other) noexcept
     if (*this == other)
         return *this;
 
-    Figure<T>::coords = other.coords;
+    this->coords = other.coords;
     other.coords = nullptr;
 
     return *this;
 }
 
 template<Number T>
-Point<double> Pentagon<T>::geomc() const
+Point<double> Pentagon<T>::geomc()
 {
-    return Figure<T>::dop_geomc(Figure<T>::coords, point_count);
+    return this->dop_geomc(this->coords, point_count);
 }
 
 template<Number T>
 Pentagon<T>::operator double() const
 {
-    return 1.7204774005889671 * std::pow(distance(Figure<T>::coords[0], Figure<T>::coords[1]), 2);
+    return 1.7204774005889671 * std::pow(distance(this->coords[0], this->coords[1]), 2);
 }
 
 template<Number T>
 std::istream& Pentagon<T>::input(std::istream& is)
 {
     for (int i{0}; i < point_count; i++)
-        is >> Figure<T>::coords[i];
+        is >> this->coords[i];
 
-    if (!check_and_reorder(Figure<T>::coords, point_count))
+    if (!this->check_and_reorder(this->coords, point_count))
     {
         throw std::invalid_argument("Невозможно построить правильный пятиугольник");
     }
@@ -106,7 +108,7 @@ std::ostream& Pentagon<T>::output(std::ostream& os) const
     os << "Пятиугольник: ";
 
     for (int i{0}; i < point_count; i++)
-        os << Figure<T>::coords[i] << ' ';
+        os << this->coords[i] << ' ';
 
     return os;
 }

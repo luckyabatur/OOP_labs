@@ -17,7 +17,7 @@ public:
 
     void push_back(const T el);
     bool del(int index);
-    bool empty(size_t index);
+    bool empty();
     int get_size();
 
     Array() = default;
@@ -25,7 +25,8 @@ public:
     Array(const Array &other);
     Array(Array &&other) noexcept;
 
-
+    Array& operator=(const Array& other);
+    Array& operator=(Array&& other);
 
     T& operator[](size_t index);
 };
@@ -82,6 +83,9 @@ Array<T>::Array(const std::initializer_list<T> &t)
 template <typename T>
 Array<T>::Array(const Array &other)
 {
+    if (this == &other)
+        return;
+
     size = capacity = other.size;
     array = std::shared_ptr<T[]>(new T[size]);
 
@@ -93,12 +97,38 @@ template <typename T>
 Array<T>::Array(Array &&other) noexcept
 {
     size = other.size;
-    array = other.array;
     capacity = other.capacity;
 
+    array = std::move(other.array);
+
     other.size = other.capacity = 0;
-    other.array = nullptr;
 }
+
+template <typename T>
+Array<T>& Array<T>::operator=(const Array<T>& other)
+{
+    size = capacity = other.size;
+    array = std::shared_ptr<T[]>(new T[size]);
+
+    for (size_t i{0}; i < size; ++i)
+        array[i] = other.array[i];
+
+    return *this;
+}
+
+template <typename T>
+Array<T>& Array<T>::operator=(Array<T>&& other)
+{
+    size = other.size;
+    capacity = other.capacity;
+
+    array = std::move(other.array);
+
+    other.size = other.capacity = 0;
+
+    return *this;
+}
+
 
 template <typename T>
 T& Array<T>::operator[](size_t index)
@@ -108,9 +138,9 @@ T& Array<T>::operator[](size_t index)
 }
 
 template <typename T>
-bool Array<T>::empty(size_t index)
+bool Array<T>::empty()
 {
-    return size;
+    return !size;
 }
 
 template <typename T>
