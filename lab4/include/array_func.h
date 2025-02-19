@@ -43,10 +43,10 @@ void input(Array<std::shared_ptr<Figure<T>>>& v)
                 fptr = std::make_shared<Pentagon<T>>();
                 break;
             case '2':
-//                fptr = new Hexagon;
+                fptr = std::make_shared<Hexagon<T>>();
                 break;
             case '3':
-//                fptr = new Octagon;
+                fptr = std::make_shared<Octagon<T>>();
                 break;
             default:
                 return;
