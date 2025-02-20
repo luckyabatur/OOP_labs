@@ -6,7 +6,7 @@
 
 Запустить devcontainer
 
-cd lab2
+cd lab7
 
 для программы ./run_program.sh  
 для тестов ./run_tests.sh
