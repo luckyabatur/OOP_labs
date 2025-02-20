@@ -3,7 +3,7 @@
 #include <iterator>
 #include <cstddef>
 
-// Минимальный двусвязный список на pmr::polymorphic_allocator
+
 template <class T>
 class PmrDList
 {
@@ -33,11 +33,13 @@ public:
         iterator(Node* p) : m_cur(p) {}
         reference operator*()  const { return m_cur->data; }
         pointer   operator->() const { return &(m_cur->data); }
-        iterator& operator++() {
+        iterator& operator++()
+        {
             if (m_cur) m_cur = m_cur->next;
             return *this;
         }
-        iterator operator++(int) {
+        iterator operator++(int)
+        {
             iterator tmp(*this);
             ++(*this);
             return tmp;
@@ -52,34 +54,35 @@ public:
             : m_alloc(mr), m_head(nullptr), m_tail(nullptr)
     {}
 
-    // Деструктор
+
     ~PmrDList() { clear(); }
 
-    // Удаляем operator= по умолчанию,
-    // т.к. polymorphic_allocator не копируется.
+
     PmrDList(const PmrDList&) = delete;
     PmrDList& operator=(const PmrDList&) = delete;
 
-    // Разрешаем перемещение, если нужно,
-    // но внутрь pmr::polymorphic_allocator всё равно
-    // не переместишь. Упростим и удалим move тоже:
+
     PmrDList(PmrDList&&) = delete;
     PmrDList& operator=(PmrDList&&) = delete;
 
-    void push_back(const T& val) {
+    void push_back(const T& val)
+    {
         Node* n = AllocTraits::allocate(m_alloc,1);
         AllocTraits::construct(m_alloc, n, val);
         linkBack(n);
     }
-    void push_back(T&& val) {
+    void push_back(T&& val)
+    {
         Node* n = AllocTraits::allocate(m_alloc,1);
         AllocTraits::construct(m_alloc, n, std::move(val));
         linkBack(n);
     }
 
-    void clear() {
+    void clear()
+    {
         Node* cur = m_head;
-        while(cur) {
+        while(cur)
+        {
             Node* nxt = cur->next;
             AllocTraits::destroy(m_alloc, cur);
             AllocTraits::deallocate(m_alloc, cur, 1);
@@ -92,13 +95,16 @@ public:
     iterator end()   { return iterator(nullptr); }
 
 private:
-    void linkBack(Node* n) {
+    void linkBack(Node* n)
+    {
         n->prev = m_tail;
         n->next = nullptr;
-        if (!m_head) {
+        if (!m_head)
+        {
             m_head = n;
         }
-        if (m_tail) {
+        if (m_tail)
+        {
             m_tail->next = n;
         }
         m_tail = n;

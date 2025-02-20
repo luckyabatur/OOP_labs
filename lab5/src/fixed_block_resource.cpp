@@ -8,7 +8,6 @@ FixedBlockResource::FixedBlockResource(std::size_t totalSize)
         : m_totalSize(totalSize)
 {
     m_buffer = ::operator new(m_totalSize);
-    // вся память свободна:
     std::uintptr_t base = reinterpret_cast<std::uintptr_t>(m_buffer);
     m_map[ base ] = { m_totalSize, true };
 }
@@ -21,7 +20,8 @@ FixedBlockResource::~FixedBlockResource()
 void* FixedBlockResource::do_allocate(std::size_t bytes, std::size_t alignment)
 {
     void* result = findFreeBlock(bytes, alignment);
-    if (!result) {
+    if (!result)
+    {
         throw std::bad_alloc();
     }
     return result;
@@ -31,10 +31,10 @@ void FixedBlockResource::do_deallocate(void* p, std::size_t /*bytes*/, std::size
 {
     std::uintptr_t addr = reinterpret_cast<std::uintptr_t>(p);
     auto it = m_map.find(addr);
-    if (it != m_map.end()) {
-        it->second.second = true; // помечаем free
+    if (it != m_map.end())
+    {
+        it->second.second = true;
     }
-    // Не сливаем блоки, упрощённый вариант
 }
 
 bool FixedBlockResource::do_is_equal(const std::pmr::memory_resource& other) const noexcept
@@ -44,26 +44,31 @@ bool FixedBlockResource::do_is_equal(const std::pmr::memory_resource& other) con
 
 void* FixedBlockResource::findFreeBlock(std::size_t bytes, std::size_t alignment)
 {
-    for (auto it = m_map.begin(); it != m_map.end(); ++it) {
+    for (auto it = m_map.begin(); it != m_map.end(); ++it)
+    {
         auto addr     = it->first;
         auto blockSz  = it->second.first;
         auto isFree   = it->second.second;
         if (!isFree) continue;
         std::uintptr_t aligned = alignAddr(addr, alignment);
-        if (aligned + bytes <= addr + blockSz) {
-            // помещаем
-            it->second.second = false; // занято
-            // разделение блока:
+        if (aligned + bytes <= addr + blockSz)
+        {
+
+            it->second.second = false;
             std::size_t usedOffset = aligned - addr;
-            if (usedOffset > 0) {
+            if (usedOffset > 0)
+            {
                 m_map[addr] = { usedOffset, true };
                 m_map[aligned] = { bytes, false };
-            } else {
+            }
+            else
+            {
                 it->second.first = bytes;
             }
             std::uintptr_t tail = aligned + bytes;
             std::size_t leftover = (addr + blockSz) - tail;
-            if (leftover > 0) {
+            if (leftover > 0)
+            {
                 m_map[tail] = { leftover, true };
             }
             return reinterpret_cast<void*>(aligned);

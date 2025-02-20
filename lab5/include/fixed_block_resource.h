@@ -5,10 +5,6 @@
 #include <cstdint>
 #include <stdexcept>
 
-/*
- * Фиксированный блок памяти.
- * Вся логика внутри .cpp
- */
 
 class FixedBlockResource : public std::pmr::memory_resource
 {
@@ -25,7 +21,6 @@ private:
     void* m_buffer{nullptr};
     std::size_t m_totalSize{0};
 
-    // map<адрес, (размер, free?)>
     std::map<std::uintptr_t, std::pair<std::size_t,bool>> m_map;
 
     void* findFreeBlock(std::size_t bytes, std::size_t alignment);

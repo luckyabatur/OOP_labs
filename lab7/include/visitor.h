@@ -5,7 +5,6 @@ class Werewolf;
 class Rogue;
 class NPC;
 
-// Visitor (двойная диспетчеризация)
 class Visitor
 {
 public:

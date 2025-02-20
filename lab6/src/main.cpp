@@ -1,21 +1,17 @@
 #include <iostream>
 #include <string>
-#include <memory>
 #include "../include/game.h"
-#include "../include/observer.h"
 #include "../include/factory.h"
 
 int main()
 {
     Game game;
 
-    // Создаём двух наблюдателей:
-    // 1) FileLogger -> "log.txt"
-    // 2) ConsoleLogger
+
     FileLogger fileObs("log.txt");
     ConsoleLogger consoleObs;
 
-    // Регистрируем их
+
     game.addObserver(&fileObs);
     game.addObserver(&consoleObs);
 
@@ -40,7 +36,6 @@ int main()
                 std::string type, name;
                 double x{}, y{};
                 std::cin >> type >> name >> x >> y;
-                // проверим границы 0..500
                 if (x < 0) x=0; if (x>500) x=500;
                 if (y < 0) y=0; if (y>500) y=500;
 
@@ -62,10 +57,13 @@ int main()
                 std::cout << "Введите имя файла для сохранения: ";
                 std::string fname;
                 std::cin >> fname;
-                try {
+                try
+                {
                     game.save(fname);
                     std::cout << "Сохранено.\n";
-                } catch(std::exception& ex) {
+                }
+                catch(std::exception& ex)
+                {
                     std::cout << "Ошибка: " << ex.what() << "\n";
                 }
                 break;
@@ -75,10 +73,13 @@ int main()
                 std::cout << "Введите имя файла для загрузки: ";
                 std::string fname;
                 std::cin >> fname;
-                try {
+                try
+                {
                     game.load(fname);
                     std::cout << "Загружено.\n";
-                } catch(std::exception& ex) {
+                }
+                catch(std::exception& ex)
+                {
                     std::cout << "Ошибка: " << ex.what() << "\n";
                 }
                 break;

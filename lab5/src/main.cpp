@@ -3,12 +3,12 @@
 #include "../include/fixed_block_resource.h"
 #include "../include/pmr_dlist.h"
 
-// "Сложный" тип
 struct MyData {
     int x;
     double y;
     MyData(int xx = 0, double yy = 0.0) : x(xx), y(yy) {}
-    friend std::ostream& operator<<(std::ostream& os, const MyData& md){
+    friend std::ostream& operator<<(std::ostream& os, const MyData& md)
+    {
         return os << "[x=" << md.x << ", y=" << md.y << "]";
     }
 };
@@ -23,7 +23,8 @@ int main()
     bool useInt = true;
 
     char choice = '0';
-    while (choice != '7') {
+    while (choice != '7')
+    {
         std::cout << "\nВыберите действие:\n"
                      "1 - Переключить тип (int / MyData)\n"
                      "2 - Добавить элемент\n"
@@ -45,12 +46,15 @@ int main()
             }
             case '2':
             {
-                if (useInt) {
+                if (useInt)
+                {
                     std::cout << "Введите int: ";
                     int val{};
                     std::cin >> val;
                     dlistInt.push_back(val);
-                } else {
+                }
+                else
+                {
                     std::cout << "Введите MyData (int x, double y): ";
                     int xx{};
                     double yy{};
@@ -61,12 +65,15 @@ int main()
             }
             case '3':
             {
-                if (useInt) {
+                if (useInt)
+                {
                     std::cout << "Содержимое dlistInt:\n";
                     for (auto it = dlistInt.begin(); it != dlistInt.end(); ++it)
                         std::cout << *it << ' ';
                     std::cout << std::endl;
-                } else {
+                }
+                else
+                {
                     std::cout << "Содержимое dlistData:\n";
                     for (auto it = dlistData.begin(); it != dlistData.end(); ++it)
                         std::cout << *it << ' ';
@@ -76,10 +83,13 @@ int main()
             }
             case '4':
             {
-                if (useInt) {
+                if (useInt)
+                {
                     dlistInt.clear();
                     std::cout << "dlistInt: очищен.\n";
-                } else {
+                }
+                else
+                {
                     dlistData.clear();
                     std::cout << "dlistData: очищен.\n";
                 }
@@ -87,8 +97,6 @@ int main()
             }
             case '5':
             {
-                // Пересоздаём ресурс прежнего размера
-                // Уничтожаем контейнеры вручную, потом делаем placement new
                 std::cout << "Пересоздаём ресурс (размер = 1024)\n";
                 dlistInt.clear();
                 dlistData.clear();

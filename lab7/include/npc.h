@@ -3,7 +3,6 @@
 
 class Visitor;
 
-// Базовый класс NPC
 class NPC
 {
 protected:
@@ -25,15 +24,12 @@ public:
     virtual std::string getType() const = 0;
     virtual void accept(Visitor& v, NPC& other) = 0;
 
-    // «скорость» и «радиус убийства»
     virtual double getMoveDistance() const = 0;
     virtual double getKillDistance() const = 0;
 
-    // Случайное перемещение внутри [0..100], если жив
     void moveRandom();
 };
 
-// Три вида:
 class Bear : public NPC
 {
 public:

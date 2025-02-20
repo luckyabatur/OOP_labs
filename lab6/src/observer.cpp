@@ -10,7 +10,8 @@ FileLogger::FileLogger(const std::string& filename)
 void FileLogger::onKill(NPC& killer, NPC& victim)
 {
     std::ofstream ofs(m_filename, std::ios::app);
-    if (ofs.is_open()) {
+    if (ofs.is_open())
+    {
         ofs << killer.getType() << "(" << killer.getName() << ") "
             << "kills "
             << victim.getType() << "(" << victim.getName() << ")\n";

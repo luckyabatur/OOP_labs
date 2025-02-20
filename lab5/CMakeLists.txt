@@ -38,12 +38,12 @@ add_executable(Figure_exe
 target_link_libraries(Figure_exe PRIVATE Figure_lib)
 
 
-#enable_testing()
-#
-#add_executable(tests
-#        ${CMAKE_CURRENT_SOURCE_DIR}/test/tests03.cpp
-#)
-#target_link_libraries(tests PRIVATE Figure_lib gtest_main)
-#
-#
-#add_test(NAME FigureTests COMMAND tests)
+enable_testing()
+
+add_executable(tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/test/tests05.cpp
+)
+target_link_libraries(tests PRIVATE Figure_lib gtest_main)
+
+
+add_test(NAME FigureTests COMMAND tests)

@@ -10,7 +10,6 @@ public:
     virtual void onKill(NPC& killer, NPC& victim) = 0;
 };
 
-// Пример: ConsoleLogger
 class ConsoleLogger : public Observer
 {
 public:

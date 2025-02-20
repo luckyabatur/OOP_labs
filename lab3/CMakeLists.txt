@@ -32,7 +32,7 @@ target_include_directories(Figure_lib
 
 
 add_executable(Figure_exe
-        ${CMAKE_CURRENT_SOURCE_DIR}/test/main.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
 )
 
 target_link_libraries(Figure_exe PRIVATE Figure_lib)
