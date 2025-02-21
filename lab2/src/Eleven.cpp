@@ -4,6 +4,11 @@ Eleven::Eleven() : _size(0), _array{nullptr} {}
 
 Eleven::Eleven(const size_t &n, unsigned char t)
 {
+    if (!(t >= '0' && t <= '9' || t == 'A'))
+    {
+        delete[] _array;
+        throw std::invalid_argument("String constructor error");
+    }
     _array = new unsigned char[n];
     for (size_t i = 0; i < n; ++i)
         _array[i] = t;
